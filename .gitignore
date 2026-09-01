@@ -48,3 +48,6 @@ AGENTS.md
 docs/maintainer-guide.md
 docs/drafts/
 forks.md
+
+# npm artifacts — this project is pnpm-only (see CLAUDE.md supply-chain rules)
+package-lock.json

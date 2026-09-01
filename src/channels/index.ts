@@ -7,3 +7,9 @@
 // self-registration import below.
 
 import './cli.js';
+
+// emacs
+import './emacs.js';
+
+// whatsapp
+import './whatsapp.js';

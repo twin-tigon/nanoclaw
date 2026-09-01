@@ -466,7 +466,11 @@ class DockerHandle implements SessionHandle {
     const proc = this.cli.start(['start', '--attach', this.name]);
     this.#proc = proc;
     proc.onStderr((line) => {
-      log.debug(line, { container: this.name });
+      if (line.includes('[OLLAMA]')) {
+        log.info(line, { container: this.name });
+      } else {
+        log.debug(line, { container: this.name });
+      }
       this.#stderrTail.push(line);
       if (this.#stderrTail.length > 10) this.#stderrTail.shift();
     });

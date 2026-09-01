@@ -41,6 +41,7 @@ import {
   type SessionClaimRow,
 } from './db/coordination.js';
 import { getHostInstanceId } from './host-instance.js';
+import { ollamaEnv } from './ollama-env.js';
 import { getDb, hasTable } from './db/connection.js';
 import { getSession } from './db/sessions.js';
 import { getSessionDriver, isSessionEventsDriver } from './drivers/index.js';
@@ -967,6 +968,7 @@ export function composeSessionSpec(input: ComposeSessionSpecInput): SessionSpec 
 
   const env: Record<string, string> = {
     TZ: containerConfig.timezone ?? TIMEZONE,
+    ...ollamaEnv(),
     ...mailboxEnvironment,
   };
   // The contributed lane (ContainerSpec.contributedEnv): registry-sourced env,

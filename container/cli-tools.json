@@ -8,5 +8,17 @@
     "name": "@anthropic-ai/claude-code",
     "version": "2.1.238",
     "onlyBuilt": true
+  },
+  {
+    "name": "@tobilu/qmd",
+    "version": "2.5.3"
+  },
+  {
+    "name": "@gongrzhe/server-gmail-autoauth-mcp",
+    "version": "1.1.11"
+  },
+  {
+    "name": "zod-to-json-schema",
+    "version": "3.22.5"
   }
 ]
