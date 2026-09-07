@@ -353,14 +353,6 @@ function buildMediaMessage(data: Buffer, filename: string, ext: string, caption?
   if (videoExts.includes(ext)) {
     return { video: data, caption, mimetype: `video/${ext.slice(1)}` };
   }
-  if (ext === '.ogg') {
-    // WhatsApp only renders the playable "voice note" bubble (round record
-    // icon + waveform) for ptt:true with this exact codec-qualified
-    // mimetype. Without both, WhatsApp treats it as a generic audio file —
-    // or on some clients, silently drops it instead of showing a document
-    // fallback.
-    return { audio: data, ptt: true, mimetype: 'audio/ogg; codecs=opus' };
-  }
   if (audioExts.includes(ext)) {
     return { audio: data, mimetype: `audio/${ext.slice(1) === 'mp3' ? 'mpeg' : ext.slice(1)}` };
   }
@@ -1050,7 +1042,6 @@ registerChannelAdapter('whatsapp', {
         // Send file attachments (first file gets the caption, rest are captionless)
         if (hasFiles) {
           let captionUsed = false;
-          let lastSentId: string | undefined;
           for (const file of message.files!) {
             try {
               const ext = path.extname(file.filename).toLowerCase();
@@ -1066,14 +1057,13 @@ registerChannelAdapter('whatsapp', {
               const sent = await sock.sendMessage(platformId, mediaMsg);
               if (sent?.key?.id && sent.message) {
                 sentMessageCache.set(sent.key.id, sent.message);
-                lastSentId = sent.key.id;
               }
               if (caption) captionUsed = true;
             } catch (err) {
               log.error('Failed to send file', { platformId, filename: file.filename, err });
             }
           }
-          if (captionUsed || !text) return lastSentId; // Text was sent as caption, or there's no text left to send
+          if (captionUsed) return; // Text was sent as caption
         }
 
         if (text) {
